@@ -73,34 +73,6 @@ export default function AboutPage() {
                 </p>
             </section>
 
-            {/* === SECTION: ABOUT THE DEVELOPER === */}
-            <section className={style.aboutSection}>
-                <h2>About the Developer</h2>
-                <br />
-                <div className={style.devContainer}>
-                    {/* Developer bio */}
-                    <div className={style.devText}>
-                        <p>
-                            Hi! I'm <strong>Vincenzo Farro</strong>, a developer and Mobile Legends gamer from Italy.
-                            I love to win, and this project was born from my desire to have an advantage during the drafting phase.
-                            My goal is to keep improving this draft tool and, in the future, integrate more advanced data such as
-                            hero win rates, patch updates, and player preferences.
-                        </p>
-                    </div>
-
-                    {/* Developer image */}
-                    <div className={style.devImageWrapper}>
-                        <Image
-                            src="/images/vincenzoImage.png"
-                            alt="Vincenzo Farro - Developer"
-                            width={200}
-                            height={200}
-                            className={style.devImage}
-                        />
-                    </div>
-                </div>
-            </section>
-
             {/* === SECTION: TECHNOLOGIES USED === */}
             <section className={style.aboutSection}>
                 <h2>Technologies Used</h2>
@@ -112,16 +84,6 @@ export default function AboutPage() {
                 </ul>
             </section>
 
-            {/* === SECTION: CONTACT LINKS === */}
-            <section className={style.aboutSection}>
-                <h2>Connect with Me</h2>
-                <ul>
-                    <li>GitHub : <a href="https://github.com/vin-03" target="_blank" rel="noopener noreferrer" className={style.blueAcccent}>github.com/vin-03</a></li>
-                    <li>Ko-fi : <a href="https://ko-fi.com/vincenzofarro" target="_blank" rel="noopener noreferrer" className={style.blueAcccent}>ko-fi.com/vincenzofarro</a></li>
-                    <li>LinkedIn : <a href="https://www.linkedin.com/in/vincenzo-farro/" target="_blank" rel="noopener noreferrer" className={style.blueAcccent}>linkedin.com/in/vincenzo-farro</a></li>
-                    <li>My WebSite : <a href="https://vincenzofarro.com/" target="_blank" rel="noopener noreferrer" className={style.blueAcccent}>vincenzofarro.com</a></li>
-                </ul>
-            </section>
         </main>
     );
 }
