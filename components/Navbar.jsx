@@ -32,9 +32,11 @@ export default function Navbar() {
 
             {/* Navbar */}
             <nav className={`${styles.navLinks} ${isOpen ? styles.showMenu : ""}`}>
+           
                 <Link href="/" onClick={() => setIsOpen(false)}>Home</Link>
                 <Link href="/draft" onClick={() => setIsOpen(false)}>Draft</Link>
                 <Link href="/about" onClick={() => setIsOpen(false)}>About</Link>
+                  <Link href="/heroes" onClick={() => setIsOpen(false)}>Heroes</Link>
             </nav>
 
         </header>
