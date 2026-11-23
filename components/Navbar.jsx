@@ -18,14 +18,14 @@ export default function Navbar() {
                     height={24}
                     className={styles.logoIcon}
                 />
-                <Link href="/" className={styles.siteName}>MLBB Draft Assistant</Link>
+                <Link href="/" className={styles.siteName}>MLBB Drafcito</Link>
             </div>
 
             {/* Hamburger */}
             <button
                 className={styles.hamburger}
                 onClick={() => setIsOpen(!isOpen)}
-                aria-label="Toggle menu"
+                aria-label="Abrir o cerrar menú"
             >
                 {isOpen ? "✖" : "☰"}
             </button>
@@ -33,10 +33,11 @@ export default function Navbar() {
             {/* Navbar */}
             <nav className={`${styles.navLinks} ${isOpen ? styles.showMenu : ""}`}>
            
-                <Link href="/" onClick={() => setIsOpen(false)}>Home</Link>
+                <Link href="/" onClick={() => setIsOpen(false)}>Inicio</Link>
                 <Link href="/draft" onClick={() => setIsOpen(false)}>Draft</Link>
-                <Link href="/about" onClick={() => setIsOpen(false)}>About</Link>
-                  <Link href="/heroes" onClick={() => setIsOpen(false)}>Heroes</Link>
+                <Link href="/about" onClick={() => setIsOpen(false)}>Acerca de</Link>
+                <Link href="/heroes" onClick={() => setIsOpen(false)}>Héroes</Link>
+                <Link href="/items" onClick={() => setIsOpen(false)}>Ítems</Link>
             </nav>
 
         </header>

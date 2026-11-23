@@ -1,44 +1,120 @@
 "use client"
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import style from "@/styles/DraftPage.module.css";
 import DraftPanel from "@/components/DraftPanel";
 import SuggestionPanel from "@/components/SuggestionPanel";
 import HeroSearchModal from "@/components/HeroSearchModal";
 
+const EMPTY_BANS = Array(10).fill(null);
+const EMPTY_TEAM = Array(5).fill(null);
 export default function DraftPage() {
     const [heroes, setHeroes] = useState([]);
+    const [isLoadingHeroes, setIsLoadingHeroes] = useState(true);
+    const [heroListError, setHeroListError] = useState("");
+    const [counters, setCounters] = useState({});
+    const [countersLoading, setCountersLoading] = useState(false);
+    const [counterError, setCounterError] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const [banSlots, setBanSlots] = useState(Array(10).fill(null));
-    const [allySlots, setAllySlots] = useState(Array(5).fill(null));
-    const [enemySlots, setEnemySlots] = useState(Array(5).fill(null));
+    const [banSlots, setBanSlots] = useState(EMPTY_BANS);
+    const [allySlots, setAllySlots] = useState(EMPTY_TEAM);
+    const [enemySlots, setEnemySlots] = useState(EMPTY_TEAM);
     const setters = {
         Banned: setBanSlots,
         Allies: setAllySlots,
         Enemies: setEnemySlots
-    }
+    };
 
     const [selectedSlot, setSelectedSlot] = useState({ panel: null, index: null });
     const [errorMessage, setErrorMessage] = useState("");
 
     useEffect(() => {
-        fetch("/data/heroes_draft_data.json")
-            .then(res => res.json())
-            .then(data => setHeroes(data))
-            .catch(err => console.error(err))
+        const controller = new AbortController();
+
+        async function loadHeroes() {
+            try {
+                const response = await fetch("/api/heroes", {
+                    cache: "no-store",
+                    signal: controller.signal
+                });
+                const result = await response.json();
+                if (!response.ok) {
+                    throw new Error(result.error || "No se pudo cargar la lista de héroes.");
+                }
+                if (!Array.isArray(result.data)) {
+                    throw new Error("La API devolvió una lista de héroes no válida.");
+                }
+                setHeroes(result.data);
+            } catch (error) {
+                if (!controller.signal.aborted) {
+                    setHeroListError(error.message);
+                }
+            } finally {
+                if (!controller.signal.aborted) {
+                    setIsLoadingHeroes(false);
+                }
+            }
+        }
+
+        loadHeroes();
+        return () => controller.abort();
     }, []);
+
+    useEffect(() => {
+        const enemySlugs = [...new Set(enemySlots.filter(Boolean))];
+        const controller = new AbortController();
+
+        if (enemySlugs.length === 0) {
+            setCounters({});
+            setCounterError("");
+            setCountersLoading(false);
+            return () => controller.abort();
+        }
+
+        async function loadCounters() {
+            setCountersLoading(true);
+            setCounterError("");
+
+            try {
+                const entries = await Promise.all(enemySlugs.map(async slug => {
+                    const response = await fetch(
+                        `/api/heroes/${encodeURIComponent(slug)}/counters`,
+                        { cache: "no-store", signal: controller.signal }
+                    );
+                    const result = await response.json();
+                    if (!response.ok) {
+                        throw new Error(result.error || `No se pudieron cargar los counters de ${slug}.`);
+                    }
+                    if (!result.data?.all?.strong) {
+                        throw new Error(`La API devolvió counters no válidos para ${slug}.`);
+                    }
+                    return [slug, result.data];
+                }));
+
+                setCounters(Object.fromEntries(entries));
+            } catch (error) {
+                if (!controller.signal.aborted) {
+                    setCounters({});
+                    setCounterError(error.message);
+                }
+            } finally {
+                if (!controller.signal.aborted) {
+                    setCountersLoading(false);
+                }
+            }
+        }
+
+        loadCounters();
+        return () => controller.abort();
+    }, [enemySlots]);
 
     function closePopUp() {
         setIsModalOpen(false);
     }
-    function openPopUp() {
-        setIsModalOpen(true);
-    }
 
     function resetDraft() {
-        setBanSlots(Array(10).fill(null));
-        setAllySlots(Array(5).fill(null));
-        setEnemySlots(Array(5).fill(null));
+        setBanSlots([...EMPTY_BANS]);
+        setAllySlots([...EMPTY_TEAM]);
+        setEnemySlots([...EMPTY_TEAM]);
     }
 
     function handleNullSlotClick(panel, index) {
@@ -51,26 +127,29 @@ export default function DraftPage() {
             const updated = [...prev];
             updated[index] = null;
             return updated;
-        })
+        });
     }
 
     function handleSlotClick(panel, index) {
-        setSelectedSlot({ panel, index })
-        openPopUp();
+        if (isLoadingHeroes || heroListError) return;
+        setSelectedSlot({ panel, index });
+        setIsModalOpen(true);
     }
 
-    function handleHeroSelect(heroId) {
+    function handleHeroSelect(heroSlug) {
         const { panel, index } = selectedSlot;
         const setter = setters[panel];
         if (!setter) return;
 
-        const isTaken =
-            banSlots.includes(heroId) ||
-            allySlots.includes(heroId) ||
-            enemySlots.includes(heroId)
+        const isTaken = [
+            ...banSlots,
+            ...allySlots,
+            ...enemySlots
+        ].includes(heroSlug);
 
         if (isTaken) {
-            setErrorMessage(`${heroes[heroId - 1].name} è già stato scelto!`);
+            const heroName = heroes.find(hero => hero.slug === heroSlug)?.name || heroSlug;
+            setErrorMessage(`${heroName} ya fue seleccionado.`);
             setTimeout(() => setErrorMessage(""), 3000);
             closePopUp();
             return;
@@ -78,7 +157,7 @@ export default function DraftPage() {
 
         setter(prev => {
             const updated = [...prev];
-            updated[index] = heroId;
+            updated[index] = heroSlug;
             return updated;
         });
 
@@ -87,22 +166,15 @@ export default function DraftPage() {
 
     return (
         <main>
-            {/* Error Banner*/}
-            {errorMessage && (
+            {(errorMessage || heroListError || counterError) && (
                 <div className={style.errorBanner}>
-                    {errorMessage}
+                    {errorMessage || heroListError || counterError}
                 </div>
             )}
 
-            {/* Draft Panels */}
+            {isLoadingHeroes && <p role="status">Cargando héroes actualizados...</p>}
+
             <section>
-                {/* <DraftPanel
-                    title="Banned"
-                    handleSlotClick={handleSlotClick}
-                    handleNullSlotClick={handleNullSlotClick}
-                    slots={banSlots}
-                    heroes={heroes}
-                /> */}
                 <DraftPanel
                     title="Allies"
                     handleSlotClick={handleSlotClick}
@@ -117,26 +189,26 @@ export default function DraftPage() {
                     slots={enemySlots}
                     heroes={heroes}
                 />
-                <button className="btn" onClick={resetDraft}>Reset Draft</button>
+                <button className="btn" type="button" onClick={resetDraft}>Reiniciar draft</button>
             </section>
 
-            {/* Suggestions */}
             <section>
                 <SuggestionPanel
                     heroes={heroes}
                     bans={banSlots}
                     allies={allySlots}
                     enemies={enemySlots}
+                    counters={counters}
+                    countersLoading={countersLoading}
                 />
             </section>
 
-            {/* HeroSearchModal component */}
             <HeroSearchModal
                 isModalOpen={isModalOpen}
                 closePopUp={closePopUp}
                 heroes={heroes}
                 handleHeroSelect={handleHeroSelect}
             />
-        </main >
-    )
+        </main>
+    );
 }

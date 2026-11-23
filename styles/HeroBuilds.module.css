@@ -1,0 +1,229 @@
+.buildsPanel {
+    display: block;
+    width: 100%;
+    max-width: 1036px;
+    margin: 0 auto 2rem;
+    padding: clamp(1rem, 3vw, 2rem);
+    border: 1px solid #293138;
+    border-radius: 1.25rem;
+    background: rgba(17, 21, 24, 0.94);
+    color: #e2e8f0;
+    text-align: left;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.18);
+}
+
+.buildsPanel h2 {
+    margin: 0;
+    color: #fff;
+    font-size: 1.35rem;
+    font-weight: 750;
+    text-align: left;
+}
+
+.intro {
+    margin-top: 0.3rem;
+    margin-bottom: 1.1rem;
+    color: #94a3b8;
+    font-size: 0.85rem;
+    text-align: left;
+}
+
+.message,
+.error {
+    font-size: 0.9rem;
+    text-align: left;
+}
+
+.message {
+    color: #cbd5e1;
+}
+
+.error {
+    color: #fda4af;
+}
+
+.rankFilters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-bottom: 1.5rem;
+}
+
+.rankButton,
+.activeRank {
+    padding: 0.4rem 0.7rem;
+    border: 1px solid #334155;
+    border-radius: 999px;
+    background: #0b0f12;
+    color: #cbd5e1;
+    font-size: 0.78rem;
+}
+
+.rankButton:hover {
+    border-color: #fbbf24;
+}
+
+.activeRank {
+    border-color: #fbbf24;
+    background: #fbbf24;
+    color: #111518;
+    font-weight: 700;
+}
+
+.lanes {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.laneGroup h3 {
+    margin-bottom: 0.65rem;
+    color: #fcd34d;
+    font-size: 1rem;
+    font-weight: 700;
+    text-align: left;
+}
+
+.buildGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: 0.75rem;
+}
+
+.buildCard {
+    min-width: 0;
+    padding: 1rem;
+    border: 1px solid #293138;
+    border-radius: 0.9rem;
+    background: #0b0f12;
+    text-align: left;
+}
+
+.buildCard h4 {
+    margin-bottom: 0.7rem;
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-align: left;
+}
+
+.fieldLabel {
+    margin-bottom: 0.35rem;
+    color: #94a3b8;
+    font-size: 0.72rem;
+    text-align: left;
+}
+
+.itemSlots {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0.4rem;
+    margin-bottom: 0.85rem;
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+}
+
+.itemSlot,
+.emptyItem {
+    position: relative;
+    display: flex;
+    width: 52px;
+    height: 52px;
+    flex: 0 0 52px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #293138;
+    border-radius: 0.65rem;
+    background: #182025;
+}
+
+.itemSlot img {
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    object-fit: cover;
+}
+
+.itemSlot span {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+    padding: 0.1rem 0.2rem;
+    border-radius: 0 0 0.6rem 0.6rem;
+    background: rgba(2, 6, 12, 0.86);
+    color: #fff;
+    font-size: 0.48rem;
+    line-height: 1.15;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.emptyItem {
+    border-style: dashed;
+    background: rgba(24, 32, 37, 0.35);
+}
+
+.buildFacts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.45rem;
+    align-items: center;
+    color: #94a3b8;
+    font-size: 0.74rem;
+    text-align: left;
+}
+
+.buildFacts strong,
+.talents strong {
+    color: #e2e8f0;
+    font-weight: 600;
+}
+
+.buildAsset {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.buildAsset > span {
+    color: #94a3b8;
+}
+
+.buildAsset img {
+    width: 27px;
+    height: 27px;
+    flex: 0 0 27px;
+    border: 1px solid #334155;
+    border-radius: 0.45rem;
+    background: #182025;
+    object-fit: cover;
+}
+
+.buildAsset strong {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.talents {
+    margin-top: 0.7rem;
+    color: #94a3b8;
+    font-size: 0.74rem;
+    text-align: left;
+}
+
+.assetsNotice {
+    margin-top: 1rem;
+    color: #fbbf24;
+    font-size: 0.75rem;
+    text-align: left;
+}
+
+@media (max-width: 420px) {
+    .buildFacts {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}

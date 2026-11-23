@@ -1,14 +1,18 @@
 import { getHeroBySlug } from "@/services/heroService";
 import HeroDetail from "@/components/heroes/HeroDetail";
+import HeroBuilds from "@/components/heroes/HeroBuilds";
+import styles from "@/styles/HeroDetail.module.css";
 
 export default async function HeroPage({ params }) {
     const { slug } = await params;
     const hero = await getHeroBySlug(slug);
 
     return (
-        <main className="min-h-screen bg-slate-950">
-            {/* Toda la información detallada (estadísticas, habilidades, skins) viene de HeroDetail */}
+        <>
             <HeroDetail hero={hero} />
-        </main>
+            <div className={styles.detailPage}>
+                <HeroBuilds slug={slug} />
+            </div>
+        </>
     );
 }

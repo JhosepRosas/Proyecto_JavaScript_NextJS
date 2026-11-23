@@ -2,12 +2,12 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
-export const metadata = { title: "MLBB Draft Assistant" };
+export const metadata = { title: "MLBB Drafcito" };
 
 export default function RootLayout({ children }) {
 
   return (
-    <html lang="en">
+    <html lang="es">
       <body>
         <Navbar />
         {children}

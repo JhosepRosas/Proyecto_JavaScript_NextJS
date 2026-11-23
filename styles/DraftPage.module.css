@@ -172,6 +172,18 @@
     width: 100%;
 }
 
+.heroOption {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 0;
+    border-radius: 6px;
+}
+
+.heroOption:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
 .heroItem {
     display: flex;
     flex-direction: column;
@@ -191,7 +203,7 @@
 }
 
 .heroItem:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: transparent;
 }
 
 .heroIcon {
@@ -204,6 +216,19 @@
 .heroName {
     font-size: 0.85rem;
     text-align: center;
+}
+
+.heroDetailLink {
+    margin-top: 0.2rem;
+    color: #fbbf24;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.heroDetailLink:hover {
+    color: #fde68a;
+    text-decoration: underline;
 }
 
 .heroFilterMessage {
@@ -292,6 +317,14 @@
 
 .greenColor {
     color: rgb(12, 200, 12);
+}
+
+.counterColor {
+    color: #4ade80;
+}
+
+.synergyColor {
+    color: #c084fc;
 }
 
 .redColor {

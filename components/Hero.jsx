@@ -1,25 +1,29 @@
-"use state"
 import Image from "next/image";
 import Link from "next/link";
+import styles from "@/styles/HomeLanding.module.css";
 
 export default function Hero() {
     return (
-        <div className="hero">
-            <div className="background">
-                <Image
-                    src="/images/homeimg2.jpg"
-                    alt="Background home page image - mlbb art"
-                    fill
-                    priority
-                    className="img"
-                />
-                <div className="overlay" />
+        <section className={styles.draftHero}>
+            <Image
+                src="/images/homeimg2.jpg"
+                alt=""
+                fill
+                priority
+                sizes="100vw"
+                className={styles.heroImage}
+            />
+            <span className={styles.draftShade} />
+            <div className={styles.draftContent}>
+                <span className={styles.heroEyebrow}>Tu compañero de estrategia en MLBB</span>
+                <h1>MLBB Drafcito</h1>
+                <p>
+                    Elige tus héroes, arma tu composición y responde a las selecciones rivales.
+                </p>
+                <Link href="/draft" className={styles.draftButton}>
+                    Crear mi draft <span aria-hidden="true">→</span>
+                </Link>
             </div>
-            <div className="content">
-                <h1>Dominate the Battlefield</h1>
-                <h2>Craft your winning strategy with our Draft Assistance tool. Analyze team compositions, counter picks, and maximize your chances of victory</h2>
-                <Link href="/draft" className="cta">Draft Assistance</Link>
-            </div>
-        </div>
+        </section>
     );
 }
